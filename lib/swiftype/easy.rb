@@ -1,5 +1,6 @@
 require 'swiftype/easy/version'
 require 'swiftype/easy/request'
+require 'swiftype/easy/result_set'
 
 module Swiftype
   class Easy
@@ -68,17 +69,13 @@ module Swiftype
       def suggest(engine_id, query, options={})
         search_params = { :q => query }.merge(options)
         response = post("engines/#{engine_id}/suggest.json", search_params)
-        results = {}
-        response['records'].each { |document_type, records| results[document_type] = records }
-        results
+        ResultSet.new(response)
       end
 
       def search(engine_id, query, options={})
         search_params = { :q => query }.merge(options)
         response = post("engines/#{engine_id}/search.json", search_params)
-        results = {}
-        response['records'].each { |document_type, records| results[document_type] = records }
-        results
+        ResultSet.new(response)
       end
     end
 
